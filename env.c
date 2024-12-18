@@ -33,6 +33,7 @@ return (NULL);
 int main(int ac, char **env)
 {
 	char *path;
+	char *split;
 
 	(void)ac;
 	(void)env;
@@ -40,7 +41,14 @@ int main(int ac, char **env)
 
 	printf("%s\n", path);
 
+	split = strtok(path, ":");
 
+	while (split)
+	{
+
+		printf("%s\n", split);
+		split = strtok(NULL, ":");
+	}
 	
     return (0);
 }
