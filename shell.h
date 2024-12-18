@@ -10,5 +10,8 @@
 #include <string.h>
 
 char *input_read(void);
+char *_getenv(const char *name, char **environ);
+
+extern char **environ;
 
 #endif

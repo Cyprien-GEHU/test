@@ -1,20 +1,45 @@
 #include "shell.h"
 
 /**
+ *
+ *
+ *
+ */
+
+char *_getenv(const char *name, char **environ)
+{
+	int len, i;
+	char *env;
+
+	len = strlen(name);
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		if (strncmp(environ[i], name, len ) == 0)
+		{
+		        env = environ[i] + len + 1;
+			return (env);
+		}
+	}
+
+return (NULL);
+}
+
+/**
  * main - prints the environment
  *
  * Return: Always 0.
  */
-int main(int ac, char **av, char **env)
+int main(int ac, char **env)
 {
-    unsigned int i;
+	char *path;
 
-    i = 0;
-    (void)ac;
-    while (env[i] != NULL)
-    {
-        printf("%s\n", env[i]);
-        i++;
-    }
+	(void)ac;
+	(void)env;
+	path = _getenv("PATH", environ);
+
+	printf("%s\n", path);
+
+	
     return (0);
 }
