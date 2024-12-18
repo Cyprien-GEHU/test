@@ -6,9 +6,9 @@
  *
  */
 
-int main (void)
+char *input_read(void)
 {
-	char *be, *splity;
+	char *be;
 	size_t n;
 	int test;
 
@@ -17,15 +17,9 @@ int main (void)
 	if (test == -1)
 	{
 		printf("error");
-		return(0);
-	}
-	splity = strtok(be, " ");
-
-	while (splity)
-	{
-		printf("%s\n", splity);
-		splity = strtok(NULL, " ");
+		free(be);
+		return(NULL);
 	}
 
-	return(0);
+	return(be);
 }

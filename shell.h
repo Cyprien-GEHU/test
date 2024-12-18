@@ -9,5 +9,6 @@
 #include <stdlib.h>
 #include <string.h>
 
+char *input_read(void);
 
 #endif
