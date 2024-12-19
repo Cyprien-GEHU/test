@@ -6,29 +6,27 @@
  *
  */
 
-int main(int ac, char **av)
+int main(void)
 {
-    unsigned int i;
-    struct stat st;
+	char *text, *splity, *command, *full_path;
+	char **arg = NULL;
+	unsigned x = 0;
 
-    if (ac < 2)
-    {
-        printf("Usage: %s path_to_file ...\n", av[0]);
-        return (1);
-    }
-    i = 1;
-    while (av[i])
-    {
-        printf("%s:", av[i]);
-        if (stat(av[i], &st) == 0)
-        {
-            printf(" FOUND\n");
-        }
-        else
-        {
-            printf(" NOT FOUND\n");
-        }
-        i++;
-    }
-    return (0);
+	text = input_read();
+
+	splity = malloc(sizeof(char *) * 1024);
+	splity = strtok(text, " ");
+
+	while (splity)
+	{
+		arg[x] = splity;
+		splity = strtok(NULL, " ");
+		x++;
+	}
+
+	command = arg[0];
+	full_path = get_path(command);
+	printf("%s\n", full_path);
+
+	return (0);
 }

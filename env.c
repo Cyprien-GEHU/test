@@ -30,25 +30,36 @@ return (NULL);
  *
  * Return: Always 0.
  */
-int main(int ac, char **env)
+char *get_path(char *command)
 {
-	char *path;
-	char *split;
-
-	(void)ac;
-	(void)env;
+	char *path, *split, *cp_path;
+	char new_path[1024];
+	struct stat st;
 	path = _getenv("PATH", environ);
 
-	printf("%s\n", path);
+	printf("%s\n", command);
 
-	split = strtok(path, ":");
+	cp_path = strdup(path);
 
-	while (split)
+	if (!cp_path)
 	{
+		printf("error strdup");
+		return(NULL);
+	}
 
-		printf("%s\n", split);
+	split = strtok(cp_path, ":");
+
+	while (split != NULL)
+	{
+		snprintf(new_path, sizeof(new_path), "%s/%s", split, command);
+		if (stat(new_path, &st) == 0 && (st.st_mode & S_IXUSR))
+		{
+			printf("%s\n", new_path);
+			free(cp_path);
+			return(command);
+		}
 		split = strtok(NULL, ":");
 	}
-	
-    return (0);
+	free(cp_path);	
+    return (NULL);
 }

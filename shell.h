@@ -11,7 +11,7 @@
 
 char *input_read(void);
 char *_getenv(const char *name, char **environ);
-
+char *get_path(char *command);
 extern char **environ;
 
 #endif
