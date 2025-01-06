@@ -13,17 +13,18 @@ int main(void)
 	unsigned x = 0;
 
 	text = input_read();
-
 	splity = malloc(sizeof(char *) * 1024);
+	arg = malloc(sizeof(char *) * 1024);
+	full_path = malloc(sizeof(char *) * 1024);
 	splity = strtok(text, " ");
-
+	
 	while (splity)
 	{
 		arg[x] = splity;
 		splity = strtok(NULL, " ");
 		x++;
 	}
-
+	
 	command = arg[0];
 	full_path = get_path(command);
 	printf("%s\n", full_path);

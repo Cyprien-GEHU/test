@@ -1,25 +1,25 @@
 #include "shell.h"
 
 /**
+ * input_read - we write the command 
  *
- *
- *
+ * Return: the command written
  */
 
 char *input_read(void)
 {
-	char *be;
+	char *command;
 	size_t n;
-	int test;
+	int line;
 
 	printf("$ ");
-	test = getline(&be, &n, stdin);
-	if (test == -1)
+	line = getline(&command, &n, stdin);
+	if (line == -1)
 	{
 		printf("error");
-		free(be);
+		free(command);
 		return(NULL);
 	}
 
-	return(be);
+	return(command);
 }

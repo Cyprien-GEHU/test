@@ -1,35 +1,68 @@
 #include "shell.h"
 
 /**
+ * _getenv -  we search the env with the name of the variable global
+ * @name : the name of variable global
+ * @environ : the environ in the shell
  *
- *
- *
- *
+ * Return: the env we found with 
  */
 
-int main(int ac, char **av)
+char *_getenv(const char *name, char **environ)
 {
-    unsigned int i;
-    struct stat st;
+	int len, i;
+	char *env;
 
-    if (ac < 2)
-    {
-        printf("Usage: %s path_to_file ...\n", av[0]);
-        return (1);
-    }
-    i = 1;
-    while (av[i])
-    {
-        printf("%s:", av[i]);
-        if (stat(av[i], &st) == 0)
-        {
-            printf(" FOUND\n");
-        }
-        else
-        {
-            printf(" NOT FOUND\n");
-        }
-        i++;
-    }
-    return (0);
+	len = strlen(name);
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		if (strncmp(environ[i], name, len ) == 0)
+		{
+		        env = environ[i] + len + 1;
+			return (env);
+		}
+	}
+
+return (NULL);
+}
+
+/**
+ * get_path - we search the path we need for execve
+ * @command : the command we send 
+ *
+ * Return: the path with the command
+ */
+
+char *get_path(char *command)
+{
+	char *path, *split, *cp_path;
+	char new_path[1024];
+	struct stat st;
+	
+	path = _getenv("PATH", environ);
+
+	cp_path = strdup(path);
+
+	if (!cp_path)
+	{
+		printf("error strdup");
+		return(NULL);
+	}
+	split = strtok(cp_path, ":");
+
+	command = "ls";
+
+	while (split !=  NULL)
+	{
+		snprintf(new_path, sizeof(new_path), "%s/%s", split, command);
+		if (stat(new_path, &st) == 0)
+		{
+			free(cp_path);
+			return(strdup(new_path));
+		}
+		split = strtok(NULL, ":");
+	}
+	free(cp_path);	
+    return (NULL);
 }
