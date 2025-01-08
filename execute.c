@@ -1,6 +1,19 @@
 #include "shell.h"
 
 /**
+ * print_env - print the environement
+ *
+ */
+
+void print_env(void)
+{
+	int y;
+
+	for (y = 0; environ[y] != NULL; y++)
+	       printf("%s\n", environ[y]);	
+}
+
+/**
  * execute_command - fucntion that execute the command received
  * @array: command received in a array after split_string
  * Return: 1 on succes
@@ -14,6 +27,10 @@ int execute_command(char **array)
 
 	if (!array)
 		return (1);
+
+	if (ex_build(array))
+		return (0);
+	handle_redirection(array);
 
 	command_path = get_path(array[0]);
 
@@ -62,7 +79,7 @@ int ex_build(char **args)
 
 	if (strcmp(args[0], "env") == 0)
 	{
-		printf("je print le env");
+		print_env();
 		return (1);
 	}
 

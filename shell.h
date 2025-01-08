@@ -20,6 +20,7 @@ void prompt(void);
 char *_getenv(const char *name, char **environ);
 char *get_path(char *command);
 void handle_redirection(char **args);
+void print_environement(void);
 
 extern char **environ;
 

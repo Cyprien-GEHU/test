@@ -37,10 +37,9 @@ int main(void)
 			free(text);
 			continue;
 		}
-		if (ex_build(arg))
-			return (0);
-		handle_redirection(arg);
-		execute_command(arg);
+		if (arg[0] != NULL)
+			execute_command(arg);
+
 		for (x = 0; arg[x] != NULL; x++)
 			free(arg[x]);
 		free(arg);

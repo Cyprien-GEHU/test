@@ -32,6 +32,7 @@ char **_string(char *input)
 		x++;
 		token = strtok(NULL, " \n\t");
 	}
+	free(token);
 	arg[x] = NULL;
 	return (arg);
 }
