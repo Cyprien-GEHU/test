@@ -1,25 +1,40 @@
 #include "shell.h"
 
 /**
- * input_read - we write the command 
+ * handle - handle the EOF and CTRL C
  *
- * Return: the command written
+ * @signal : we don't use
  */
 
-char *input_read(void)
+void handle(int signal)
 {
-	char *command;
-	size_t n;
-	int line;
+	char cwd[1024];
+	(void)signal;
 
-	printf("$ ");
-	line = getline(&command, &n, stdin);
-	if (line == -1)
+	write(STDOUT_FILENO, "\n", 1);
+
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
-		printf("error");
-		free(command);
-		return(NULL);
+		write(STDOUT_FILENO, "$", 1);
 	}
+	else
+		write(STDOUT_FILENO, "root", 4);
+}
 
-	return(command);
+/**
+ * prompt - the prompt of simple shell
+ *
+ */
+
+void prompt(void)
+{
+	char cwd[1024];
+
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	{
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "$", 1);
+	}
+	else
+		write(STDOUT_FILENO, "root", 4);
 }

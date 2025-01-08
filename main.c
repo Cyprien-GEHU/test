@@ -1,33 +1,50 @@
 #include "shell.h"
 
 /**
+ * main - cree a simple shell
  *
- *
- *
+ * Return: 0;
  */
 
 int main(void)
 {
-	char *text, *splity, *command, *full_path;
-	char **arg = NULL;
-	unsigned x = 0;
+	char *text;
+	char **arg;
+	int  x;
 
-	text = input_read();
-	splity = malloc(sizeof(char *) * 1024);
-	arg = malloc(sizeof(char *) * 1024);
-	full_path = malloc(sizeof(char *) * 1024);
-	splity = strtok(text, " ");
-	
-	while (splity)
+	signal(SIGINT, handle);
+	while (1)
 	{
-		arg[x] = splity;
-		splity = strtok(NULL, " ");
-		x++;
+		prompt();
+		text = input_read();
+		if (!text)
+			break;
+		if (strcmp(text, "\n") == 0 || strlen(text) == 0)
+		{
+			free(text);
+			continue;
+		}
+		if (text[strlen(text)] == '\n')
+			text[strlen(text)] = '\0';
+		if (strcmp(text, "exit") == 0)
+		{
+			free(text);
+			exit(0);
+		}
+		arg = _string(text);
+		if (!arg)
+		{
+			free(text);
+			continue;
+		}
+		if (ex_build(arg))
+			return (0);
+		handle_redirection(arg);
+		execute_command(arg);
+		for (x = 0; arg[x] != NULL; x++)
+			free(arg[x]);
+		free(arg);
+		free(text);
 	}
-	
-	command = arg[0];
-	full_path = get_path(command);
-	printf("%s\n", full_path);
-
 	return (0);
 }

@@ -5,7 +5,7 @@
  * @name : the name of variable global
  * @environ : the environ in the shell
  *
- * Return: the env we found with 
+ * Return: the env we found with
  */
 
 char *_getenv(const char *name, char **environ)
@@ -17,9 +17,9 @@ char *_getenv(const char *name, char **environ)
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
-		if (strncmp(environ[i], name, len ) == 0)
+		if (strncmp(environ[i], name, len) == 0)
 		{
-		        env = environ[i] + len + 1;
+			env = environ[i] + len + 1;
 			return (env);
 		}
 	}
@@ -28,41 +28,47 @@ return (NULL);
 }
 
 /**
- * get_path - we search the path we need for execve
- * @command : the command we send 
+ * get_path - we search the path with the command
+ * @command : the command we send
  *
  * Return: the path with the command
  */
 
 char *get_path(char *command)
 {
-	char *path, *split, *cp_path;
-	char new_path[1024];
+	char *path, *split, *cp_path, *new_path;
 	struct stat st;
-	
+	size_t len;
+
 	path = _getenv("PATH", environ);
 
+	if (access(command, X_OK) == 0)
+		return (strdup(command));
 	cp_path = strdup(path);
 
 	if (!cp_path)
 	{
 		printf("error strdup");
-		return(NULL);
+		return (NULL);
 	}
+
 	split = strtok(cp_path, ":");
 
-	command = "ls";
-
-	while (split !=  NULL)
+	while (split != NULL)
 	{
-		snprintf(new_path, sizeof(new_path), "%s/%s", split, command);
+		len = strlen(split) + strlen(command) + 2;
+		new_path = malloc(sizeof(char) * len);
+		sprintf(new_path, "%s/%s", split, command);
+
 		if (stat(new_path, &st) == 0)
 		{
 			free(cp_path);
-			return(strdup(new_path));
+			return (strdup(new_path));
 		}
+
 		split = strtok(NULL, ":");
 	}
-	free(cp_path);	
-    return (NULL);
+	free(cp_path);
+	free(split);
+	return (NULL);
 }
