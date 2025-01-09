@@ -36,7 +36,7 @@ return (NULL);
 
 char *get_path(char *command)
 {
-	char *path, *split, *cp_path, *new_path;
+	char *path, *token, *cp_path, *new_path;
 	struct stat st;
 	size_t len;
 
@@ -44,30 +44,34 @@ char *get_path(char *command)
 
 	if (access(command, X_OK) == 0)
 		return (strdup(command));
-	cp_path = strdup(path);
 
+	cp_path = strdup(path);
 	if (!cp_path)
 	{
 		printf("error strdup");
 		return (NULL);
 	}
 
-	split = strtok(cp_path, ":");
-
-	while (split != NULL)
+	token = strtok(cp_path, ":");
+	while (token != NULL)
 	{
-		len = strlen(split) + strlen(command) + 2;
+		len = strlen(token) + strlen(command) + 2;
 		new_path = malloc(sizeof(char) * len);
-		sprintf(new_path, "%s/%s", split, command);
 
+		if (!new_path)
+			break;
+
+		sprintf(new_path, "%s/%s", token, command);
 		if (stat(new_path, &st) == 0)
 		{
 			free(cp_path);
-			return (strdup(new_path));
+			return (new_path);
 		}
+
 		free(new_path);
-		split = strtok(NULL, ":");
+		token = strtok(NULL, ":");
 	}
+	free(token);
 	free(cp_path);
 	return (NULL);
 }

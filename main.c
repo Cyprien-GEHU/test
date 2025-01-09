@@ -8,8 +8,7 @@
 
 int main(void)
 {
-	char *text;
-	char **arg;
+	char *text, **arg;
 	int  x;
 
 	signal(SIGINT, handle);

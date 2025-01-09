@@ -18,6 +18,13 @@ char **_string(char *input)
 		return (NULL);
 
 	token = strtok(input, " \n\t");
+
+	if (!token)
+	{
+		free(arg);
+		return (NULL);
+	}
+
 	while (token)
 	{
 		arg[x] = strdup(token);
